@@ -26,7 +26,23 @@ VAR
    registro_juicios: juicios;
    registros_actuaciones: actuaciones;
 
+PROCEDURE crea_archivo_juicios;
+ BEGIN
+ rewrite(archivo_juicios);
+ close(archivo_juicios);
+ END;
+
+PROCEDURE crea_archivo_actuaciones;
+ BEGIN
+ rewrite(archivo_actuaciones);
+ close(archivo_actuaciones);
+ END;
+
+
 BEGIN
-
-
+assign(archivo_juicios,'C:\Users\JULIO\Desktop\software-estudio-abogados\juicios.dat');
+assign(archivo_actuaciones,'C:\Users\JULIO\Desktop\software-estudio-abogados\actuaciones.dat');
+crea_archivo_juicios;
+crea_archivo_actuaciones;
+menu_principal;
 END.
