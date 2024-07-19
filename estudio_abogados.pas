@@ -38,6 +38,38 @@ PROCEDURE crea_archivo_actuaciones;
  close(archivo_actuaciones);
  END;
 
+PROCEDURE menu_principal;
+VAR
+ op: integer;
+ BEGIN
+ REPEAT
+ writeln('SOFTWARE DE ESTUDIO DE ABOGADOS v.0');
+ writeln('-----------------------------------');
+ writeln();
+ writeln('1. Listado de un juicio');
+ writeln('2. Gastos totales');
+ writeln('3. Modificar estado');
+ writeln('4. Salir');
+ writeln();
+ writeln('-------------------------');
+ write('Seleccione opcion: ');
+ readln(op);
+ CASE op OF
+      1:BEGIN
+        clrscr;
+        listado;
+        END;
+    {  2:BEGIN
+        clrscr;
+        gastos;
+        END;
+      3:BEGIN
+        clrscr;
+        modificar;
+        END;   }
+ END;
+ UNTIL (op = 4);
+ END;
 
 BEGIN
 assign(archivo_juicios,'C:\Users\JULIO\Desktop\software-estudio-abogados\juicios.dat');
