@@ -46,10 +46,12 @@ VAR
  writeln('SOFTWARE DE ESTUDIO DE ABOGADOS v.0');
  writeln('-----------------------------------');
  writeln();
- writeln('1. Listado de un juicio');
- writeln('2. Gastos totales');
- writeln('3. Modificar estado');
- writeln('4. Salir');
+ writeln('1. Cargar juicio');
+ writeln('2. Cargar actuacion');
+ writeln('3. Listado de un juicio');
+ writeln('4. Gastos totales');
+ writeln('5. Modificar estado');
+ writeln('6. Salir');
  writeln();
  writeln('-------------------------');
  write('Seleccione opcion: ');
@@ -57,18 +59,26 @@ VAR
  CASE op OF
       1:BEGIN
         clrscr;
-        listado;
+        carga_juicio;
         END;
-    {  2:BEGIN
+      2:BEGIN
         clrscr;
-        gastos;
+        carga_actuacion;
         END;
       3:BEGIN
         clrscr;
+        listado;
+        END;
+      4:BEGIN
+        clrscr;
+        gastos;
+        END;
+      5:BEGIN
+        clrscr;
         modificar;
-        END;   }
+        END;
  END;
- UNTIL (op = 4);
+ UNTIL (op = 6);
  END;
 
 BEGIN
