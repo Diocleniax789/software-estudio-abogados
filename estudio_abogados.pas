@@ -3,21 +3,21 @@ USES CRT;
 
 TYPE
     juicios = RECORD
-            nj: integer;
-            id: integer;
-            juz: integer;
+            numero_juicio: integer;
+            identificador: integer;
+            juzgado: integer;
             anio: integer;
-            car: string;
-            nc: integer;
-            cli: string;
-            est: char;
+            caratula: string;
+            numero_cliente: integer;
+            cliente: string;
+            estado: string;
     END;
 
     actuaciones = RECORD
-                id: integer;
-                desc: string;
-                cht: real;
-                gast: real;
+                identificador: integer;
+                descripcion: string;
+                cant_horas_trabajadas: real;
+                gastos: real;
     END;
 
 VAR
@@ -36,6 +36,80 @@ PROCEDURE crea_archivo_actuaciones;
  BEGIN
  rewrite(archivo_actuaciones);
  close(archivo_actuaciones);
+ END;
+
+PROCEDURE carga_juicio;
+VAR
+ op_1: string;
+ op: integer;
+ BEGIN
+ REPEAT
+ clrscr;
+ reset(archivo_juicios);
+ textcolor(lightcyan);
+ writeln('CARGUE AQUI LOS DATOS DEL JUICIO');
+ writeln('--------------------------------');
+ writeln();
+ write('>>> Ingrese numero de juicio: ');
+ readln(registro_juicios.numero_juicio);
+ writeln();
+ write('>>> Ingrese numero identificador: ');
+ readln(registro_juicios.identificador);
+ writeln();
+ write('>>> Ingrese numero de juzgado: ');
+ readln(registro_juicios.juzgado);
+ writeln();
+ write('>>> Ingrese anio del juicio: ');
+ readln(registro_juicios.anio);
+ writeln();
+ write('>>> Ingrese caratula: ');
+ readln(registro_juicios.caratula);
+ writeln();
+ write('>>> Ingrese numero cliente: ');
+ readln(registro_juicios.numero_cliente);
+ writeln();
+ write('>>> Ingrese nombre cliente: ');
+ readln(registro_juicios.cliente);
+ writeln();
+ writeln('>>> Seleccione estado del juicio: ');
+ writeln();
+ writeln('1. Activo');
+ writeln('2. Cerrado');
+ writeln();
+ write('Seleccione opcion: ');
+ readln(op);
+ CASE op OF
+      1:BEGIN
+        registro_juicios.estado:= 'activo';
+        END;
+      2:BEGIN
+        registro_juicios.estado:= 'cerrado';
+        END;
+ END;
+ seek(archivo_juicios,filesize(archivo_juicios));
+ write(archivo_juicios, registro_juicios);
+ textcolor(lightgreen);
+ writeln();
+ writeln('==================================');
+ writeln('*** REGISTRO CARGADO CON EXITO ***');
+ writeln('==================================');
+ writeln();
+ close(archivo_juicios);
+ REPEAT
+ textcolor(lightcyan);
+ write('Desea volver a cargar otro registro[s/n]?: ');
+ readln(op_1);
+ IF (op_1 <> 's') AND (op_1 <> 'n') THEN
+  BEGIN
+  textcolor(lightred);
+  writeln();
+  writeln('///////////////////////////////////////');
+  writeln('X VALOR INCORRECTO. VUELVA A INGRESAR X');
+  writeln('///////////////////////////////////////');
+  writeln();
+  END;
+ UNTIL (op_1 = 's') OR (op_1 = 'n');
+ UNTIL (op_1 = 'n');
  END;
 
 PROCEDURE menu_principal;
@@ -61,7 +135,7 @@ VAR
         clrscr;
         carga_juicio;
         END;
-      2:BEGIN
+   {   2:BEGIN
         clrscr;
         carga_actuacion;
         END;
@@ -76,7 +150,7 @@ VAR
       5:BEGIN
         clrscr;
         modificar;
-        END;
+        END;   }
  END;
  UNTIL (op = 6);
  END;
