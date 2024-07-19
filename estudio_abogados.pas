@@ -342,6 +342,92 @@ VAR
   readln();
  END;
 
+PROCEDURE modifica_actualiza(cliente: integer);
+VAR
+ f: boolean;
+ sup,inf,medio: integer;
+ BEGIN
+ f:= false;
+ sup:= filesize(archivo_juicios) - 1;
+ inf:= 0;
+ REPEAT
+ medio:= (inf + sup) div 2;
+ seek(archivo_juicios,medio);
+ read(archivo_juicios,registro_juicios);
+ IF cliente = registro_juicios.numero_cliente THEN
+  f:= true
+ ELSE IF registro_juicios.numero_cliente > cliente THEN
+  sup:= medio - 1
+ ELSE
+  inf:= medio + 1;
+ UNTIL eof(archivo_juicios) OR (f = true);
+ IF f = true THEN
+  BEGIN
+  IF registro_juicios.estado = 'activo' THEN
+   registro_juicios.estado:= 'cerrado'
+  ELSE
+   registro_juicios.estado:= 'activo';
+  seek(archivo_juicios,filepos(archivo_juicios) - 1);
+  write(archivo_juicios,registro_juicios);
+  writeln();
+  textcolor(lightgreen);
+  writeln('============================');
+  writeln('*** REGISTRO ACTUALIZADO ***');
+  writeln('============================');
+  writeln();
+  END
+ ELSE
+  BEGIN
+  textcolor(lightred);
+  writeln('/////////////////////////');
+  writeln('X NO EXISTE ESE CLIENTE X');
+  writeln('/////////////////////////');
+  writeln();
+  END;
+ END;
+
+PROCEDURE modificar;
+VAR
+ cliente: integer;
+ op: string;
+ BEGIN
+ IF vericar_estado_archivo_juicio = true THEN
+  BEGIN
+  textcolor(lightred);
+  writeln();
+  writeln('////////////////////////////////////////////////////');
+  writeln('X EL ARCHIVO JUICIOS ESTA VACIO. INTENTE MAS TARDE X');
+  writeln('////////////////////////////////////////////////////');
+  delay(tiempo);
+  END
+ ELSE
+  BEGIN
+  REPEAT
+  clrscr;
+  textcolor(white);
+  reset(archivo_juicios);
+  write('>>> Ingrese nro de cliente: ');
+  readln(cliente);
+  modifica_actualiza(cliente);
+  close(archivo_juicios);
+  REPEAT
+  textcolor(yellow);
+  write('Desea modificar nuevamente[s/n]?: ');
+  readln(op);
+  IF (op <> 's') AND (op <> 'n') THEN
+    BEGIN
+    textcolor(lightred);
+    writeln();
+    writeln('///////////////////////////////////////');
+    writeln('X VALOR INCORRECTO. VUELVA A INGRESAR X');
+    writeln('///////////////////////////////////////');
+    writeln();
+    END;
+  UNTIL (op = 's') OR (op = 'n');
+  UNTIL (op = 'n');
+ END;
+ END;
+
 PROCEDURE menu_principal;
 VAR
  op: integer;
@@ -379,10 +465,10 @@ VAR
         clrscr;
         gastos;
         END;
-   {   5:BEGIN
+      5:BEGIN
         clrscr;
         modificar;
-        END;   }
+        END;
  END;
  UNTIL (op = 6);
  END;
